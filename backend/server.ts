@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import bcrypt from 'bcryptjs';
 import session from 'express-session';
 import bodyParser from 'body-parser';
+import { prisma } from './connect';
 
 const app = express();
 
@@ -28,11 +29,24 @@ app.post("/login", (req, res) => {
     console.log(req.body);
 });
 
-app.post("/register", (req, res) => {
-    console.log(req.body);
+app.post("/register", async (req, res) => {
+    const user = await prisma.user.findFirst({
+        where: { username: req.body.username }
+    });
+    if(user) res.send("Чел уже существует!");
+    if(!user){
+        const hashedPassword = await bcrypt.hash(req.body.password, 10);
+        await prisma.user.create({
+            data: {
+                username: req.body.username,
+                password: hashedPassword
+            }
+        });
+        res.send("Created!");
+    }
 });
 
-app.get("/user", (req, res) => {});
+app.get("/getUser", (req, res) => {});
 
 app.listen(4000, () => {
     console.log("Server has started");
