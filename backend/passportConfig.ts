@@ -1,8 +1,8 @@
 import { Strategy as LocalStrategy } from 'passport-local';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcryptjs';
 import { prisma } from './connect';
 
-export function pass(passport){
+export = function(passport){
     passport.use(
         new LocalStrategy(async (username, password, done) => {
             const user = await prisma.user.findFirst({

@@ -6,6 +6,7 @@ export default function Auth(){
     const [registerPassword, setRegisterPassword] = useState("");
     const [loginUsername, setLoginUsername] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
+    const [data, setData] = useState(null);
     const register = () => {
         axios({
             method: "POST",
@@ -32,8 +33,8 @@ export default function Auth(){
         axios({
             method: "GET",
             withCredentials: true,
-            url: "http://localhost:4000/getUser"
-        }).then(res => console.log(res));
+            url: "http://localhost:4000/user"
+        }).then(res => setData(res.data));
     };
 
     return(
@@ -53,6 +54,9 @@ export default function Auth(){
             <div className="getUser">
                 <h1>Get User</h1>
                 <button onClick={getUser}>Submit</button>
+                {
+                    data ? <h1>Welcome back {data}</h1>:null
+                }
             </div>
         </>
     )

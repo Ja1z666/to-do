@@ -1,10 +1,10 @@
-import express from 'express';
-import { Strategy as LocalStrategy } from 'passport-local';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import bcrypt from 'bcryptjs';
-import session from 'express-session';
-import bodyParser from 'body-parser';
+import * as express from 'express';
+import * as cors from 'cors';
+import * as passport from 'passport';
+import * as cookieParser from 'cookie-parser';
+import * as bcrypt from 'bcryptjs';
+import * as session from 'express-session';
+import * as bodyParser from 'body-parser';
 import { prisma } from './connect';
 
 const app = express();
@@ -25,8 +25,22 @@ app.use(session({
 
 app.use(cookieParser("secretcode"));
 
-app.post("/login", (req, res) => {
-    console.log(req.body);
+app.use(passport.initialize());
+app.use(passport.session());
+require("./passportConfig")(passport);
+
+app.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+        if(err) return err;
+        if(!user) res.send("No user exists");
+        else{
+            req.logIn(user, err => {
+                if(err) return;
+                res.send("Successfully authenticated");
+                console.log(req.user);
+            })
+        }
+    })(req, res, next);
 });
 
 app.post("/register", async (req, res) => {
@@ -46,7 +60,10 @@ app.post("/register", async (req, res) => {
     }
 });
 
-app.get("/getUser", (req, res) => {});
+app.get("/user", (req, res) => {
+    res.json(req.user);
+    console.log(req.user);
+});
 
 app.listen(4000, () => {
     console.log("Server has started");
