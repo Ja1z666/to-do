@@ -28,7 +28,6 @@ export = function(passport){
         const user = await prisma.user.findFirst({
             where: { id }
         });
-
-        cb(user);
+        cb(null, user);
     });
 }

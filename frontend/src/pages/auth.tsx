@@ -6,7 +6,6 @@ export default function Auth(){
     const [registerPassword, setRegisterPassword] = useState("");
     const [loginUsername, setLoginUsername] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
-    const [data, setData] = useState(null);
     const register = () => {
         axios({
             method: "POST",
@@ -27,14 +26,11 @@ export default function Auth(){
             },
             withCredentials: true,
             url: "http://localhost:4000/login"
-        }).then(res => console.log(res));
-    };
-    const getUser = () => {
-        axios({
-            method: "GET",
-            withCredentials: true,
-            url: "http://localhost:4000/user"
-        }).then(res => setData(res.data));
+        }).then(res => {
+            if(res.data === "Successfully authenticated"){
+                window.location.href = "/";
+            }
+        });
     };
 
     return(
@@ -50,13 +46,6 @@ export default function Auth(){
                 <input type="text" placeholder="username" onChange={e => setLoginUsername(e.target.value)} />
                 <input type="password" placeholder="password" onChange={e => setLoginPassword(e.target.value)} />
                 <button onClick={login}>Submit</button>
-            </div>
-            <div className="getUser">
-                <h1>Get User</h1>
-                <button onClick={getUser}>Submit</button>
-                {
-                    data ? <h1>Welcome back {data}</h1>:null
-                }
             </div>
         </>
     )

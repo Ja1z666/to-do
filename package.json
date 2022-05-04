@@ -18,5 +18,8 @@
   "homepage": "https://github.com/Ja1z666/to-do#readme",
   "devDependencies": {
     "@types/express": "^4.17.13"
+  },
+  "dependencies": {
+    "eslint-config-react-app": "^6.0.0"
   }
 }

@@ -1,14 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import { Auth } from './pages';
+import { Auth, Main } from './pages';
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Auth />
+    <Router>
+      <Routes>
+        <Route path='/' element={<Main />}/>
+        <Route path='/auth' element={<Auth />}/>
+      </Routes>
+    </Router>
   </React.StrictMode>
 );
 

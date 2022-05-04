@@ -61,8 +61,16 @@ app.post("/register", async (req, res) => {
 });
 
 app.get("/user", (req, res) => {
-    res.json(req.user);
-    console.log(req.user);
+    if (req.isAuthenticated()) {
+        res.send(req.user);
+    }else {
+        res.send("not auth");
+    }
+});
+
+app.get("/logout", (req, res) => {
+    req.logout();
+    res.send("success")
 });
 
 app.listen(4000, () => {
