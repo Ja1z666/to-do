@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from 'axios';
 
 export default function Main(){
+    const [todos, setTodos] = useState([]);
     axios({
         method: "GET",
         withCredentials: true,
@@ -24,6 +25,9 @@ export default function Main(){
         <>
             <h1>Main</h1>
             <button onClick={logout}>Logout</button>
+            <div className="todo-app">
+
+            </div>
         </>
     )
 }
