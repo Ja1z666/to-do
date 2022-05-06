@@ -5,6 +5,7 @@ export function CreateFolderField({getFolder}:any){
     const [title, setTitle] = useState('')
 
 	const addFolder = async (title:string) => {
+        if(!title) return;
 		await axios({
             method: "POST",
             data: {

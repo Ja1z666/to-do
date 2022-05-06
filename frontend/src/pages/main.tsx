@@ -11,15 +11,6 @@ export default function Main(){
     const [folderName, setFolderName] = useState("");
     const [username, setUsername] = useState(null);
 
-    // const changeTodo = (id: string) => {
-	// 	const copy = [...todos]
-	// 	const current = copy.find(t => t.id === id)!
-	// 	current.isCompleted = !current.isCompleted
-	// 	setTodos(copy)
-	// }
-
-    // const removeTodo = (id: string) => setTodos([...todos].filter(t => t.id !== id))
-
     useEffect(() => {
         axios({
             method: "GET",

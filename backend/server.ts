@@ -140,6 +140,7 @@ app.post("/createTask", async (req, res) => {
                     create: {
                         title: req.body.title,
                         isCompleted: false,
+                        date: req.body.date,
                         folderId: req.body.id
                     }
                 }
@@ -216,6 +217,31 @@ app.post("/changeTitleTask", async (req, res) => {
                         },
                         data: {
                             title: req.body.title
+                        }
+                    }
+                }
+            }
+        });
+        res.send("Greate");
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.post("/changeDateTask", async (req, res) => {
+    if (req.isAuthenticated()){
+        await prisma.user.update({
+            where: {
+                id: req.user["id"]
+            },
+            data: {
+                tasks: {
+                    update: {
+                        where: {
+                            id: req.body.id
+                        },
+                        data: {
+                            date: req.body.date
                         }
                     }
                 }

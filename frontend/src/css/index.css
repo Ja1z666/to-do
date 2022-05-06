@@ -222,3 +222,19 @@ h3{
 .folders-shr{
     display: flex;
 }
+
+.date{
+    color: #5A5A5A;
+}
+
+.editInput{
+    width: 200px;
+    height: 25px;
+    font-size: 14px;
+    padding: 0px 10px;
+    margin-left: 10px;
+}
+
+.edit-block button{
+    margin-left: 8px;
+}
