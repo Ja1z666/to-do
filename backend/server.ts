@@ -68,6 +68,108 @@ app.get("/user", (req, res) => {
     }
 });
 
+app.post("/createFolder", async (req, res) => {
+    if (req.isAuthenticated()){
+        await prisma.user.update({
+            where: {
+                id: req.user["id"]
+            },
+            data: {
+                folders: {
+                    create: {
+                        title: req.body.title
+                    }
+                }
+            }
+        });
+        res.send("Greate");
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.get("/getUserFolder", async (req, res) => {
+    if (req.isAuthenticated()){
+        const folder = await prisma.folder.findMany({
+            where: {
+                authorId: req.user["id"]
+            }
+        });
+        res.send(folder);
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.post("/createTask", async (req, res) => {
+    if (req.isAuthenticated()){
+        await prisma.folder.update({
+            where: {
+                id: req.body.id
+            },
+            data: {
+                tasks: {
+                    create: {
+                        title: req.body.title,
+                        isCompleted: false
+                    }
+                }
+            }
+        });
+        res.send("Greate");
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.post("/deleteTask", async (req, res) => {
+    if (req.isAuthenticated()){
+        await prisma.task.delete({
+            where: {
+                id: req.body.id
+            }
+        });
+        res.send("Greate");
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.post("/updateTask", async (req, res) => {
+    if (req.isAuthenticated()){
+        let task = await prisma.task.findFirst({
+            where: {
+                id: req.body.id
+            }
+        });
+
+        await prisma.task.update({
+            where: {
+                id: req.body.id
+            },
+            data: {
+                isCompleted: !task.isCompleted
+            }
+        });
+        res.send("Greate");
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.post("/getUserTask", async (req, res) => {
+    if (req.isAuthenticated()){
+        const task = await prisma.task.findMany({
+            where: {
+                folderId: req.body.id
+            }
+        });
+        res.send(task);
+    }else{
+        res.send("Not auth");
+    }
+});
+
 app.get("/logout", (req, res) => {
     req.logout();
     res.send("success")

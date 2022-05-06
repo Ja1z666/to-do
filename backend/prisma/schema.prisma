@@ -7,6 +7,23 @@ model User {
   id Int @id @default(autoincrement())
   username String @db.VarChar(255)
   password String @db.VarChar(255)
+  folders Folder[]
+}
+
+model Folder {
+  id Int @id @default(autoincrement())
+  title String
+  tasks Task[]
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+  title String
+  isCompleted Boolean @default(false)
+  folder Folder @relation(fields: [folderId], references: [id])
+  folderId Int
 }
 
 generator client {

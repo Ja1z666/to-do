@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+body{
+    background-color: #EA5959;
+    font-family: 'Lato', sans-serif;
+}
+
+.btn-reset{
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+header{
+    margin-top: 60px;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+}
+
+.header-block{
+    width: 1000px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-block h1{
+    color: white;
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.header-block button{
+    font:inherit;
+    font-size: 30px;
+    font-weight: 700;
+    color: white;
+    height: 40px;
+}
+
+.block{
+    width: 1000px;
+    height: 700px;
+    background-color: #ffffff;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.25);
+    border-radius: 8px;
+}
+
+.block .block-content{
+    display: flex;
+    padding: 0px 40px;
+    height: 700px;
+}
+
+.block-content .folders{
+    width: 220px;
+    border-right: solid 1px #D8D8D8;
+}
+
+input{
+    height: 40px;
+    width: 571px;
+    background: #F3F3F3;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    padding: 0px 30px;
+}
+
+::placeholder{
+    color: #B5B5B5;
+}
+
+.block-content .folders input{
+    margin-bottom: 30px;
+    margin-top: 130px;
+    width: 120px;
+}
+
+.block-content .folders .folders-list{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.block-content .folders .folders-list button{
+    margin-bottom: 24px;
+    margin-left: 5px;
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+}
+
+.block-content .todo-app{
+    width: 630px;
+    margin: 10px 0px 0px 50px;
+}
+
+.block-content .todo-app h2{
+    font-weight: 700;
+    font-size: 30px;
+}
+
+.block-content .todo-app .task{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.block-content .todo-app .task .title{
+    display: flex;
+    align-items: center;
+}
+
+.block-content .todo-app .task .title p{
+    margin-left: 15px;
+}
+
+.block-content .todo-app .task .title-false{
+    color: #5A5A5A;
+}
+
+.block-content .todo-app .task .title-true{
+    color: #ea595975;
+}
+
+.block-content .todo-app .task .complete-false{
+    width: 30px;
+    height: 30px;
+    border: 2px solid #EA5959;
+    border-radius: 8px;
+}
+
+.block-content .todo-app .task .complete-true{
+    width: 30px;
+    height: 30px;
+    border: 2px solid #EA5959;
+    border-radius: 8px;
+    background-color: #EA5959;
+}
+
+.block-content .todo-app .task .buttons{
+    display: flex;
+    align-items: center;
+}
+
+.block-content .todo-app .task .buttons button{
+    margin-left: 15px;
+}
+
+.block-content .todo-app .tasks{
+    margin-top: 15px;
+}
+
+.auth-block{
+    display: flex;
+    justify-content: center;
+    height: 700px;
+}
+
+.auth-block .log-block, .auth-block .reg-block{
+    display: flex;
+}
+
+.auth-block .log-block .login, .auth-block .reg-block .register{
+    display: flex;
+    align-items: center;
+}
+
+.auth-block .content{
+    width: 300px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.auth-block .log-block{
+    border-right: solid 1px #D8D8D8;
+}
+
+.auth-block input{
+    margin-bottom: 10px;
+    width: 200px;
+}

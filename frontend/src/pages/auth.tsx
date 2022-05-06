@@ -6,6 +6,7 @@ export default function Auth(){
     const [registerPassword, setRegisterPassword] = useState("");
     const [loginUsername, setLoginUsername] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
+    
     const register = () => {
         axios({
             method: "POST",
@@ -17,6 +18,7 @@ export default function Auth(){
             url: "http://localhost:4000/register"
         }).then(res => console.log(res));
     };
+
     const login = () => {
         axios({
             method: "POST",
@@ -35,18 +37,41 @@ export default function Auth(){
 
     return(
         <>
-            <div className="register">
-                <h1>Register</h1>
-                <input type="text" placeholder="username" onChange={e => setRegisterUsername(e.target.value)} />
-                <input type="password" placeholder="password" onChange={e => setRegisterPassword(e.target.value)} />
-                <button onClick={register}>Submit</button>
-            </div>
-            <div className="login">
-                <h1>Login</h1>
-                <input type="text" placeholder="username" onChange={e => setLoginUsername(e.target.value)} />
-                <input type="password" placeholder="password" onChange={e => setLoginPassword(e.target.value)} />
-                <button onClick={login}>Submit</button>
-            </div>
+            <header>
+                <div className="container header-container">
+                    <div className="header-block">
+                        <h1>Todo List xDD ~honk-honk~ ...hahaha</h1>
+                    </div>
+                </div>
+            </header>
+            <main>
+                <div className="container">
+                    <div className="block">
+                        <div className="auth-block">
+                            <div className="log-block">
+                                <div className="login">
+                                    <div className="content">
+                                        <h1>Login</h1>
+                                        <input type="text" placeholder="username" onChange={e => setLoginUsername(e.target.value)} />
+                                        <input type="password" placeholder="password" onChange={e => setLoginPassword(e.target.value)} />
+                                        <button onClick={login}>Login</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="reg-block">
+                                <div className="register">
+                                    <div className="content">
+                                        <h1>Register</h1>
+                                        <input type="text" placeholder="username" onChange={e => setRegisterUsername(e.target.value)} />
+                                        <input type="password" placeholder="password" onChange={e => setRegisterPassword(e.target.value)} />
+                                        <button onClick={register}>Register</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </>
     )
 }
