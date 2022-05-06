@@ -8,12 +8,12 @@ model User {
   username String @db.VarChar(255)
   password String @db.VarChar(255)
   folders Folder[]
+  tasks Task[]
 }
 
 model Folder {
   id Int @id @default(autoincrement())
   title String
-  tasks Task[]
   author User @relation(fields: [authorId], references: [id])
   authorId Int
 }
@@ -22,8 +22,9 @@ model Task {
   id Int @id @default(autoincrement())
   title String
   isCompleted Boolean @default(false)
-  folder Folder @relation(fields: [folderId], references: [id])
   folderId Int
+  author User @relation(fields: [authorId], references: [id])
+  authorId Int
 }
 
 generator client {

@@ -88,6 +88,34 @@ app.post("/createFolder", async (req, res) => {
     }
 });
 
+app.post("/deleteFolder", async (req, res) => {
+    if (req.isAuthenticated()){
+        await prisma.user.update({
+            where: {
+                id: req.user["id"]
+            },
+            data: {
+                folders: {
+                    delete: {
+                        id: req.body.id
+                    }
+                }
+            }
+        });
+        await prisma.task.deleteMany({
+            where: {
+                folderId: req.body.id,
+                AND: {
+                    authorId: req.user["id"]
+                }
+            }
+        })
+        res.send("Greate");
+    }else{
+        res.send("Not auth");
+    }
+});
+
 app.get("/getUserFolder", async (req, res) => {
     if (req.isAuthenticated()){
         const folder = await prisma.folder.findMany({
@@ -103,15 +131,16 @@ app.get("/getUserFolder", async (req, res) => {
 
 app.post("/createTask", async (req, res) => {
     if (req.isAuthenticated()){
-        await prisma.folder.update({
+        await prisma.user.update({
             where: {
-                id: req.body.id
+                id: req.user["id"]
             },
             data: {
                 tasks: {
                     create: {
                         title: req.body.title,
-                        isCompleted: false
+                        isCompleted: false,
+                        folderId: req.body.id
                     }
                 }
             }
@@ -124,9 +153,16 @@ app.post("/createTask", async (req, res) => {
 
 app.post("/deleteTask", async (req, res) => {
     if (req.isAuthenticated()){
-        await prisma.task.delete({
+        await prisma.user.update({
             where: {
-                id: req.body.id
+                id: req.user["id"]
+            },
+            data: {
+                tasks: {
+                    delete: {
+                        id: req.body.id
+                    }
+                }
             }
         });
         res.send("Greate");
@@ -143,12 +179,46 @@ app.post("/updateTask", async (req, res) => {
             }
         });
 
-        await prisma.task.update({
+        await prisma.user.update({
             where: {
-                id: req.body.id
+                id: req.user["id"]
             },
             data: {
-                isCompleted: !task.isCompleted
+                tasks: {
+                    update: {
+                        where: {
+                            id: req.body.id
+                        },
+                        data:{
+                            isCompleted: !task.isCompleted
+                        }
+                    }
+                }
+            }
+        });
+        res.send("Greate");
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.post("/changeTitleTask", async (req, res) => {
+    if (req.isAuthenticated()){
+        await prisma.user.update({
+            where: {
+                id: req.user["id"]
+            },
+            data: {
+                tasks: {
+                    update: {
+                        where: {
+                            id: req.body.id
+                        },
+                        data: {
+                            title: req.body.title
+                        }
+                    }
+                }
             }
         });
         res.send("Greate");
@@ -159,9 +229,13 @@ app.post("/updateTask", async (req, res) => {
 
 app.post("/getUserTask", async (req, res) => {
     if (req.isAuthenticated()){
+        if(!req.body.id) return res.send([]);
         const task = await prisma.task.findMany({
             where: {
-                folderId: req.body.id
+                folderId: req.body.id,
+                AND: {
+                    authorId: req.user["id"]
+                }
             }
         });
         res.send(task);
