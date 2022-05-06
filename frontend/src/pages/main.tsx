@@ -43,7 +43,22 @@ export default function Main(){
             },
             withCredentials: true,
             url: "http://localhost:4000/getUserTask"
-        }).then(res => setTodos(res.data));
+        }).then(res => {
+            setTodos(res.data)
+
+            let sorted = res.data.sort(function(a:any, b:any){
+                if(a.id < b.id){
+                    return 1;
+                }
+            });
+                
+            // let sorted = (res.data).sort(function(a:any, b:any){
+            //     if(a.isCompleted > b.isCompleted){
+            //         return 1;
+            //     }
+            // });
+            console.log(sorted);
+        });
     }
 
     const getFolder = () => {
@@ -87,7 +102,9 @@ export default function Main(){
                                 <CreateFolderField getFolder={getFolder}/>
                                 <div className="folders-list">
                                     {folders.map(folder => (
-                                        <button className="btn-reset" key={folder["id"]} onClick={() => {getTask(folder["id"]); setFolder(folder["id"]); setFolderName(folder["title"])}}>{folder["title"]}</button>
+                                        <div className="folder">
+                                            <button className="btn-reset" key={folder["id"]} onClick={() => {getTask(folder["id"]); setFolder(folder["id"]); setFolderName(folder["title"])}}>{folder["title"]}</button>
+                                        </div>
                                     ))}
                                 </div>
                             </div>
