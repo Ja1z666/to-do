@@ -61,7 +61,7 @@ export default function Main(){
     }
 
     const getFolder = async () => {
-        await axios({
+        axios({
             method: "GET",
             withCredentials: true,
             url: "http://localhost:4000/getUserFolder"

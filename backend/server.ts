@@ -90,6 +90,12 @@ app.post("/createFolder", async (req, res) => {
 
 app.post("/deleteFolder", async (req, res) => {
     if(req.isAuthenticated()){
+        await prisma.share.deleteMany({
+            where: {
+                folderId: req.body.id
+            }
+        });
+        
         await prisma.user.update({
             where: {
                 id: req.user["id"]
