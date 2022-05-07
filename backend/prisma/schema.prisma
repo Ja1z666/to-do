@@ -16,6 +16,14 @@ model Folder {
   title String
   author User @relation(fields: [authorId], references: [id])
   authorId Int
+  sharedTo Share[]
+}
+
+model Share{
+  id Int @id @default(autoincrement())
+  folder Folder @relation(fields: [folderId], references: [id])
+  folderId Int
+  userId Int
 }
 
 model Task {
@@ -26,6 +34,12 @@ model Task {
   folderId Int
   author User @relation(fields: [authorId], references: [id])
   authorId Int
+}
+
+model Token {
+  id String @id @default(uuid())
+  folderId Int
+  targerUserId Int
 }
 
 generator client {

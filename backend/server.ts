@@ -61,7 +61,7 @@ app.post("/register", async (req, res) => {
 });
 
 app.get("/user", (req, res) => {
-    if (req.isAuthenticated()) {
+    if(req.isAuthenticated()) {
         res.send(req.user);
     }else {
         res.send("not auth");
@@ -69,7 +69,7 @@ app.get("/user", (req, res) => {
 });
 
 app.post("/createFolder", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
         await prisma.user.update({
             where: {
                 id: req.user["id"]
@@ -89,7 +89,7 @@ app.post("/createFolder", async (req, res) => {
 });
 
 app.post("/deleteFolder", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
         await prisma.user.update({
             where: {
                 id: req.user["id"]
@@ -117,7 +117,7 @@ app.post("/deleteFolder", async (req, res) => {
 });
 
 app.get("/getUserFolder", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
         const folder = await prisma.folder.findMany({
             where: {
                 authorId: req.user["id"]
@@ -130,10 +130,21 @@ app.get("/getUserFolder", async (req, res) => {
 });
 
 app.post("/createTask", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
+        let user:any = await prisma.share.findFirst({
+            where: {
+                userId: req.user["id"]
+            },
+            include: {
+                folder: {}
+            }
+        });
+        if(!user) user = req.user["id"];
+        else user = user.folder.authorId;
+
         await prisma.user.update({
             where: {
-                id: req.user["id"]
+                id: user
             },
             data: {
                 tasks: {
@@ -153,10 +164,21 @@ app.post("/createTask", async (req, res) => {
 });
 
 app.post("/deleteTask", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
+        let user:any = await prisma.share.findFirst({
+            where: {
+                userId: req.user["id"]
+            },
+            include: {
+                folder: {}
+            }
+        })
+        if(!user) user = req.user["id"];
+        else user = user.folder.authorId;
+
         await prisma.user.update({
             where: {
-                id: req.user["id"]
+                id: user
             },
             data: {
                 tasks: {
@@ -173,7 +195,18 @@ app.post("/deleteTask", async (req, res) => {
 });
 
 app.post("/updateTask", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
+        let user:any = await prisma.share.findFirst({
+            where: {
+                userId: req.user["id"]
+            },
+            include: {
+                folder: {}
+            }
+        })
+        if(!user) user = req.user["id"];
+        else user = user.folder.authorId;
+
         let task = await prisma.task.findFirst({
             where: {
                 id: req.body.id
@@ -182,7 +215,7 @@ app.post("/updateTask", async (req, res) => {
 
         await prisma.user.update({
             where: {
-                id: req.user["id"]
+                id: user
             },
             data: {
                 tasks: {
@@ -204,10 +237,21 @@ app.post("/updateTask", async (req, res) => {
 });
 
 app.post("/changeTitleTask", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
+        let user:any = await prisma.share.findFirst({
+            where: {
+                userId: req.user["id"]
+            },
+            include: {
+                folder: {}
+            }
+        })
+        if(!user) user = req.user["id"];
+        else user = user.folder.authorId;
+
         await prisma.user.update({
             where: {
-                id: req.user["id"]
+                id: user
             },
             data: {
                 tasks: {
@@ -229,10 +273,21 @@ app.post("/changeTitleTask", async (req, res) => {
 });
 
 app.post("/changeDateTask", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
+        let user:any = await prisma.share.findFirst({
+            where: {
+                userId: req.user["id"]
+            },
+            include: {
+                folder: {}
+            }
+        })
+        if(!user) user = req.user["id"];
+        else user = user.folder.authorId;
+
         await prisma.user.update({
             where: {
-                id: req.user["id"]
+                id: user
             },
             data: {
                 tasks: {
@@ -254,17 +309,104 @@ app.post("/changeDateTask", async (req, res) => {
 });
 
 app.post("/getUserTask", async (req, res) => {
-    if (req.isAuthenticated()){
+    if(req.isAuthenticated()){
         if(!req.body.id) return res.send([]);
+
+        let user:any;
+        await prisma.user.findFirst({
+            where: {
+                id: req.user["id"]
+            }
+        }).then(e => user = e.id);
+        if(!user) prisma.share.findFirst({
+            where: {
+                userId: req.user["id"]
+            }
+        }).then(e => user = e.userId);
+        if(!user) return;
+
         const task = await prisma.task.findMany({
             where: {
-                folderId: req.body.id,
+                folderId: req.body.id
+            }
+        });
+        res.send(task);
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.post("/createToken", async (req, res) => {
+    if(req.isAuthenticated()){
+        const folder = await prisma.task.findMany({
+            where: {
+                folderId: req.body.folderId,
                 AND: {
                     authorId: req.user["id"]
                 }
             }
         });
-        res.send(task);
+        if(!folder) return;
+        const user = await prisma.user.findFirst({
+            where: {
+                username: req.body.username
+            }
+        })
+        if(!user) return res.send("Unknown user");
+        prisma.token.create({
+            data: {
+                folderId: req.body.folderId,
+                targerUserId: user.id
+            }
+        }).then(e => res.send("http://localhost:4000/invite/verification/" + e.id));
+    }else{
+        res.send("Not auth");
+    }
+});
+
+app.get("/invite/verification/:token", async (req, res) => {
+    if(req.isAuthenticated()){
+        const token = await prisma.token.findFirst({
+            where: {
+                id: req.params.token
+            }
+        });
+        if(!token) return res.send(`<h1>Bad token</h1>`);
+        if(token.targerUserId != req.user["id"]) return res.send(`<h1>Nice try</h1>`);
+        await prisma.folder.update({
+            where: {
+                id: token.folderId
+            },
+            data: {
+                sharedTo: {
+                    create: {
+                        userId: token.targerUserId
+                    }
+                }
+            }
+        });
+        await prisma.token.delete({
+            where: {
+                id: token.id
+            }
+        });
+        res.send(`<h1><a href="http://localhost:3000/">Move to to-do</a></h1>`);
+    }else{
+        res.send(`<h1>Please login <a href="http://localhost:3000/">here</a></h1>`);
+    }
+});
+
+app.get("/getSharedFolders", async (req, res) => {
+    if(req.isAuthenticated()){
+        const folder = await prisma.share.findMany({
+            where: {
+                userId: req.user["id"]
+            },
+            include: {
+                folder: {}
+            }
+        });
+        res.send(folder);
     }else{
         res.send("Not auth");
     }

@@ -18,6 +18,6 @@ export function CreateFolderField({getFolder}:any){
         getFolder();
 	}
     return(
-		<input type='text' onChange={e => setTitle(e.target.value)} value={title} onKeyPress={e => e.key === 'Enter' && addFolder(title)} placeholder='Create folder' />
+		<input className="create-folder" type='text' onChange={e => setTitle(e.target.value)} value={title} onKeyPress={e => e.key === 'Enter' && addFolder(title)} placeholder='Create folder' />
     )
 }

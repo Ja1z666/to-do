@@ -78,7 +78,7 @@ input{
     color: #B5B5B5;
 }
 
-.block-content .folders input{
+.block-content .folders .create-folder{
     margin-bottom: 30px;
     margin-top: 130px;
     width: 120px;
@@ -99,10 +99,24 @@ input{
 
 .block-content .folders .folder{
     display: flex;
-    align-items: center;
-    justify-content: space-between;
     margin-bottom: 24px;
     width: 170px;
+}
+
+.own-folder{
+    flex-direction: column;
+}
+
+.folder .folder-title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 170px;
+}
+
+.folder .share input{
+    margin-top: 10px;
+    width: 120px;
 }
 
 .block-content .folders .folder .share-btn svg{
